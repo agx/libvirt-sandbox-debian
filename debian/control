@@ -17,21 +17,85 @@ Build-Depends:
  libxml2-dev,
 Standards-Version: 3.9.6
 Homepage: http://sandbox.libvirt.org/
-#Vcs-Git: git://anonscm.debian.org/collab-maint/libvirt-sandbox.git
-#Vcs-Browser: https://anonscm.debian.org/gitweb/?p=collab-maint/libvirt-sandbox.git;a=summary
 
-Package: libvirt-sandbox
+Package: virt-sandbox
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
-Description: An application sandbox toolkit
-  The Libvirt Sandbox project is an effort to facilitate the use of libvirt
-  virtualization drivers for the purpose of sandboxing applications. It
-  supports LXC and QEMU/KVM.
-  .
-  It provides a high level API to enable the construction of sandboxes
-  and isolation from the need to understand the virtualization technology
-  configuration.
-  .
-  It allows integration with systemd to setup service unit files inside a
-  sandbox.
+Depends: ${shlibs:Depends},
+ ${misc:Depends}, 
+ python,
+ gir1.2-libvirt-sandbox-1.0 (= ${binary:Version}),
+Suggests:
+ python-selinux
+Description: Application sandbox toolkit
+ The Libvirt Sandbox project is an effort to facilitate the use of libvirt
+ virtualization drivers for the purpose of sandboxing applications. It
+ supports LXC and QEMU/KVM.
+ .
+ It provides a high level API to enable the construction of sandboxes
+ and isolation from the need to understand the virtualization technology
+ configuration.
+ .
+ It allows integration with systemd to setup service unit files inside a
+ sandbox.
+ .
+ This package contains the binaries to run sandboxed applications and
+ services.
 
+
+Package: libvirt-sandbox-1.0-5
+Architecture: any
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Application sandbox toolkit shared library
+ The Libvirt Sandbox project is an effort to facilitate the use of libvirt
+ virtualization drivers for the purpose of sandboxing applications. It
+ supports LXC and QEMU/KVM.
+ .
+ It provides a high level API to enable the construction of sandboxes
+ and isolation from the need to understand the virtualization technology
+ configuration.
+ .
+ It allows integration with systemd to setup service unit files inside a
+ sandbox.
+ .
+ This package contains the shared libraries.
+
+
+Package: libvirt-sandbox-1.0-dev
+Architecture: any
+Section: libdevel
+Depends: libvirt-sandbox-1.0-5 (= ${binary:Version}), ${misc:Depends},
+ gir1.2-libvirt-sandbox-1.0 (= ${binary:Version}), libvirt-glib-1.0-dev
+Description: Development files for libvirt-sandbox library
+ The Libvirt Sandbox project is an effort to facilitate the use of libvirt
+ virtualization drivers for the purpose of sandboxing applications. It
+ supports LXC and QEMU/KVM.
+ .
+ It provides a high level API to enable the construction of sandboxes
+ and isolation from the need to understand the virtualization technology
+ configuration.
+ .
+ It allows integration with systemd to setup service unit files inside a
+ sandbox.
+ .
+ This package contains the header files and static libraries which are needed
+ for developing the applications with libvirt-sandbox.
+
+
+Package: gir1.2-libvirt-sandbox-1.0
+Architecture: any
+Section: introspection
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${gir:Depends}
+Description: GObject introspection files for the libvirt-sandbox library
+ The Libvirt Sandbox project is an effort to facilitate the use of libvirt
+ virtualization drivers for the purpose of sandboxing applications. It
+ supports LXC and QEMU/KVM.
+ .
+ It provides a high level API to enable the construction of sandboxes
+ and isolation from the need to understand the virtualization technology
+ configuration.
+ .
+ It allows integration with systemd to setup service unit files inside a
+ sandbox.
+ .
+ This package contains the GObject-introspection data in binary typelib format.

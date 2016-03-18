@@ -1,0 +1,3 @@
+usr/lib/*/libvirt-sandbox-1.0.so.*
+usr/lib/*/libvirt-sandbox-init-*
+etc/libvirt-sandbox/scratch/
