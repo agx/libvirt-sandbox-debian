@@ -1,1 +1,3 @@
 Silence-PyGIWarnings.patch
+tests-add-file-extension-for-host-mounts.patch
+sandbox-builder-Always-stop-in-case-of-failure-to-list-di.patch
