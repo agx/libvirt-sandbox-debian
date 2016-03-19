@@ -1,7 +1,8 @@
 Source: libvirt-sandbox
 Section: admin
 Priority: optional
-Maintainer: Guido Günther <agx@sigxcpu.org>
+Maintainer: Debian Libvirt Maintainers <pkg-libvirt-maintainers@lists.alioth.debian.org>
+Uploaders: Guido Günther <agx@sigxcpu.org>
 Build-Depends:
  autoconf,
  automake,
@@ -17,6 +18,8 @@ Build-Depends:
  libxml2-dev,
 Standards-Version: 3.9.6
 Homepage: http://sandbox.libvirt.org/
+Vcs-Git: https://anonscm.debian.org/git/git/pkg-libvirt/libvirt-sandbox.git
+Vcs-Browser: https://git.debian.org/?p=pkg-libvirt/libvirt-sandbox.git
 
 Package: virt-sandbox
 Architecture: any
@@ -24,8 +27,6 @@ Depends: ${shlibs:Depends},
  ${misc:Depends}, 
  python,
  gir1.2-libvirt-sandbox-1.0 (= ${binary:Version}),
-Suggests:
- python-selinux
 Description: Application sandbox toolkit
  The Libvirt Sandbox project is an effort to facilitate the use of libvirt
  virtualization drivers for the purpose of sandboxing applications. It

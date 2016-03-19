@@ -1,8 +1,8 @@
-usr/bin/virt-sandbox*
-usr/share/man/man1/virt-sandbox*
+usr/bin/virt-sandbox
+usr/bin/virt-sandbox-image
+usr/share/man/man1/virt-sandbox.*
 usr/share/locale/*
 usr/lib/python2.7/
 usr/share/bash-completion/
-etc/cron.daily/
 etc/libvirt-sandbox/services/
 usr/lib/*/virt-sandbox-service-util
