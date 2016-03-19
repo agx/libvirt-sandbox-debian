@@ -23,7 +23,10 @@ include /usr/share/dpkg/default.mk
 
 override_dh_auto_configure:
 	[ -x ./configure ] || ./autogen.sh
-	dh_auto_configure -- --enable-introspection
+	dh_auto_configure -- --enable-introspection \
+	                     --with-capng \
+	                     --with-lzma \
+	                     $(NULL)
 
 override_dh_auto_clean:
 	[ ! -f Makefile ] || dh_auto_clean
