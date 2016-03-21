@@ -26,6 +26,7 @@ override_dh_auto_configure:
 	dh_auto_configure -- --enable-introspection \
 	                     --with-capng \
 	                     --with-lzma \
+	                     --libexecdir /usr/lib/$(DEB_HOST_MULTIARCH)/libvirt-sandbox/ \
 	                     $(NULL)
 
 override_dh_auto_clean:

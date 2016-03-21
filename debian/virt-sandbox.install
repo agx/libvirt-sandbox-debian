@@ -5,4 +5,4 @@ usr/share/locale/*
 usr/lib/python2.7/
 usr/share/bash-completion/
 etc/libvirt-sandbox/services/
-usr/lib/*/virt-sandbox-service-util
+usr/lib/*/libvirt-sandbox/virt-sandbox-service-util
