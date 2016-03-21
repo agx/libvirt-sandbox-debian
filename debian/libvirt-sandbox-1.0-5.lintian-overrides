@@ -1,4 +1,4 @@
 # Statically linked since run in the container:
-statically-linked-binary usr/lib/x86_64-linux-gnu/libvirt-sandbox-init-lxc
-embedded-library usr/lib/x86_64-linux-gnu/libvirt-sandbox-init-qemu: zlib
-statically-linked-binary usr/lib/x86_64-linux-gnu/libvirt-sandbox-init-qemu
+statically-linked-binary usr/lib/*/libvirt-sandbox/libvirt-sandbox-init-lxc
+embedded-library usr/lib/*/libvirt-sandbox/libvirt-sandbox-init-qemu: zlib
+statically-linked-binary usr/lib/*/libvirt-sandbox/libvirt-sandbox-init-qemu
