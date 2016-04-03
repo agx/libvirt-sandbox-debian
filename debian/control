@@ -10,12 +10,12 @@ Build-Depends:
  gtk-doc-tools,
  intltool,
  libcap-ng-dev,
- libgirepository1.0-dev,
- libglib2.0-dev,
- liblzma-dev,
+ libgirepository1.0-dev (>= 0.10.8),
+ libglib2.0-dev (>= 2.32.0),
+ liblzma-dev (>= 4.0.0),
  libselinux-dev,
  libtool-bin,
- libvirt-glib-1.0-dev,
+ libvirt-glib-1.0-dev (>= 0.2.2),
  libxml2-dev,
 Standards-Version: 3.9.6
 Homepage: http://sandbox.libvirt.org/
