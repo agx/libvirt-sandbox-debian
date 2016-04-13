@@ -1,3 +1,14 @@
+libvirt-sandbox (0.5.1+git20151113-2) unstable; urgency=medium
+
+  * [f2431ad] Enable lzma and capng support
+  * [6f66423,4a033fb] Move helpers out of /usr/lib/
+  * [d1152c9] Allow one to switch to a specific user id
+  * [b4ef7fd] Bump required versions according to configure.ac.
+    Thanks to Petter Reinholdtsen for the hint
+  * [06012f4] Add missing files to copyright file
+
+ -- Guido Günther <agx@sigxcpu.org>  Wed, 13 Apr 2016 20:18:37 +0200
+
 libvirt-sandbox (0.5.1+git20151113-1) unstable; urgency=low
 
   * Initial release (Closes: #658988)
