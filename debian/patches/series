@@ -2,3 +2,4 @@ Silence-PyGIWarnings.patch
 tests-add-file-extension-for-host-mounts.patch
 sandbox-builder-Always-stop-in-case-of-failure-to-list-di.patch
 Allow-to-switch-to-a-specific-user-id.patch
+virt-sandbox-document-how-to-pass-arguments-to-commands.patch
