@@ -1,3 +1,12 @@
+libvirt-sandbox (0.5.1+git20151113-3) unstable; urgency=medium
+
+  * [92a5e6a] Don't hardcode x86_64. Fixes a c'n'p error which breaks builds
+    on other architectures (Closes: #821107)
+  * [c93bd09] docs: document how to pass arguments to commands run via
+    virt-sandbox
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 15 Apr 2016 18:09:41 +0200
+
 libvirt-sandbox (0.5.1+git20151113-2) unstable; urgency=medium
 
   * [f2431ad] Enable lzma and capng support
