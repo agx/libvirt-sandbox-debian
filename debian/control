@@ -17,7 +17,7 @@ Build-Depends:
  libtool-bin,
  libvirt-glib-1.0-dev (>= 0.2.2),
  libxml2-dev,
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Homepage: http://sandbox.libvirt.org/
 Vcs-Git: https://anonscm.debian.org/git/pkg-libvirt/libvirt-sandbox.git
 Vcs-Browser: https://anonscm.debian.org/git/pkg-libvirt/libvirt-sandbox.git
