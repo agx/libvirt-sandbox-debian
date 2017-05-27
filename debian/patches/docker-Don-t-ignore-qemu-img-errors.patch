@@ -1,0 +1,21 @@
+From: =?utf-8?q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Sat, 27 May 2017 18:16:46 +0200
+Subject: docker: Don't ignore qemu-img errors
+
+---
+ libvirt-sandbox/image/sources/docker.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libvirt-sandbox/image/sources/docker.py b/libvirt-sandbox/image/sources/docker.py
+index 43e9c32..aa5675e 100755
+--- a/libvirt-sandbox/image/sources/docker.py
++++ b/libvirt-sandbox/image/sources/docker.py
+@@ -662,7 +662,7 @@ class DockerSource(base.Source):
+         cmd.append("-o")
+         cmd.append("backing_fmt=qcow2,backing_file=%s" % diskfile)
+         cmd.append(tempfile)
+-        subprocess.call(cmd)
++        subprocess.check_call(cmd)
+         return tempfile
+ 
+     def get_command(self, template, templatedir, userargs):

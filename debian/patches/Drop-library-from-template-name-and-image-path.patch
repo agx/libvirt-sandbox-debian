@@ -1,0 +1,52 @@
+From: =?utf-8?q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Sat, 27 May 2017 18:13:10 +0200
+Subject: Drop library/ from template name and image path
+
+If one pastes from the output of virt-sansbox-image
+
+  $ virt-sandbox-image list
+  docker:/library/ubuntu?tag=17.04
+  docker:/library/debian?tag=latest
+
+verbatim
+
+  $ virt-sandbox-image run -c qemu:///session docker:/library/debian?tag=latest
+
+This fails like
+
+  /home/<usr>/.local/share/libvirt/images/library/debian:qbeilwxard.qcow2: Could not create file: No such file or directory
+  Unable to start sandbox: Failed to create domain: XML error: name library/debian:qbeilwxard cannot contain '/'
+  /usr/bin/virt-sandbox-image: [Errno 2] No such file or directory: '/home/<user>/.local/share/libvirt/images/library/debian:qbeilwxard.qcow2'
+
+so strip of any leading components.
+---
+ libvirt-sandbox/image/cli.py            | 2 +-
+ libvirt-sandbox/image/sources/docker.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libvirt-sandbox/image/cli.py b/libvirt-sandbox/image/cli.py
+index 3a5ccfa..0f27a16 100644
+--- a/libvirt-sandbox/image/cli.py
++++ b/libvirt-sandbox/image/cli.py
+@@ -96,7 +96,7 @@ def run(args):
+     name = args.name
+     if name is None:
+         randomid = ''.join(random.choice(string.lowercase) for i in range(10))
+-        name = tmpl.path[1:] + ":" + randomid
++        name = tmpl.path[1:].split('/')[-1] + ":" + randomid
+ 
+     diskfile = source.get_disk(template=tmpl,
+                                templatedir=template_dir,
+diff --git a/libvirt-sandbox/image/sources/docker.py b/libvirt-sandbox/image/sources/docker.py
+index aa5675e..6ca086c 100755
+--- a/libvirt-sandbox/image/sources/docker.py
++++ b/libvirt-sandbox/image/sources/docker.py
+@@ -655,7 +655,7 @@ class DockerSource(base.Source):
+     def get_disk(self, template, templatedir, imagedir, sandboxname):
+         image = DockerImage.from_template(template)
+         configfile, diskfile = self._get_template_data(image, templatedir)
+-        tempfile = imagedir + "/" + sandboxname + ".qcow2"
++        tempfile = imagedir + "/" + sandboxname.split('/')[-1] + ".qcow2"
+         if not os.path.exists(imagedir):
+             os.makedirs(imagedir)
+         cmd = ["qemu-img","create","-q","-f","qcow2"]

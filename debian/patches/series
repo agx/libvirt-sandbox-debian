@@ -1,1 +1,3 @@
 mkinitrd-Add-missing-fscrypto-module.patch
+docker-Don-t-ignore-qemu-img-errors.patch
+Drop-library-from-template-name-and-image-path.patch
