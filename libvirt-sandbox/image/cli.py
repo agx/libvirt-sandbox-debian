@@ -68,13 +68,13 @@ def get_template_dir(args):
     tmpl = template.Template.from_uri(args.template)
     return "%s/%s" % (args.template_dir, tmpl.source)
 
-def delete(args):
+def purge(args):
     tmpl = template.Template.from_uri(args.template)
     source = tmpl.get_source_impl()
     source.delete_template(template=tmpl,
                            templatedir=get_template_dir(args))
 
-def create(args):
+def prepare(args):
     tmpl = template.Template.from_uri(args.template)
     source = tmpl.get_source_impl()
     source.create_template(template=tmpl,
@@ -91,7 +91,7 @@ def run(args):
 
     # Create the template image if needed
     if not source.has_template(tmpl, template_dir):
-        create(args)
+        prepare(args)
 
     name = args.name
     if name is None:
@@ -135,6 +135,18 @@ def run(args):
     os.unlink(diskfile)
     source.post_run(tmpl, template_dir, name)
 
+def list_cached(args):
+    tmpls = []
+    if args.source is not None:
+        tmpls.extend(template.Template.get_all(args.source,
+                                               "%s/%s" % (args.template_dir, args.source)))
+    else:
+        for source in ["docker", "virt-builder"]:
+            tmpls.extend(template.Template.get_all(source,
+                                                   "%s/%s" % (args.template_dir, source)))
+    for tmpl in tmpls:
+        print tmpl
+
 def requires_template(parser):
     parser.add_argument("template",
                         help=_("URI of the template"))
@@ -142,6 +154,11 @@ def requires_template(parser):
 def requires_name(parser):
     parser.add_argument("-n","--name",
                         help=_("Name of the running sandbox"))
+
+def requires_debug(parser):
+    parser.add_argument("-d","--debug",
+                        default=False, action="store_true",
+                        help=_("Run in debug mode"))
 
 def check_connect(connectstr):
     supportedDrivers = ['lxc:///','qemu:///session','qemu:///system']
@@ -180,24 +197,27 @@ Example supported URI formats:
 """)
     return parser
 
-def gen_delete_args(subparser):
-    parser = gen_command_parser(subparser, "delete",
-                                _("Delete template data"))
+def gen_purge_args(subparser):
+    parser = gen_command_parser(subparser, "purge",
+                                _("Purge cached template"))
+    requires_debug(parser)
     requires_template(parser)
     requires_template_dir(parser)
-    parser.set_defaults(func=delete)
+    parser.set_defaults(func=purge)
 
-def gen_create_args(subparser):
-    parser = gen_command_parser(subparser, "create",
-                                _("Create image from template data"))
+def gen_prepare_args(subparser):
+    parser = gen_command_parser(subparser, "prepare",
+                                _("Prepare local template"))
+    requires_debug(parser)
     requires_template(parser)
     requires_connect(parser)
     requires_template_dir(parser)
-    parser.set_defaults(func=create)
+    parser.set_defaults(func=prepare)
 
 def gen_run_args(subparser):
     parser = gen_command_parser(subparser, "run",
-                                _("Run an already built image"))
+                                _("Run an instance of a template"))
+    requires_debug(parser)
     requires_name(parser)
     requires_template(parser)
     requires_connect(parser)
@@ -213,34 +233,48 @@ def gen_run_args(subparser):
 
     parser.set_defaults(func=run)
 
+def gen_list_args(subparser):
+    parser = gen_command_parser(subparser, "list",
+                                _("List locally cached images"))
+    requires_debug(parser)
+    requires_template_dir(parser)
+
+    parser.add_argument("-s","--source",
+                        help=_("Name of the template source"))
+
+    parser.set_defaults(func=list_cached)
+
 def main():
     parser = argparse.ArgumentParser(description="Sandbox Container Image Tool")
 
     subparser = parser.add_subparsers(help=_("commands"))
-    gen_delete_args(subparser)
-    gen_create_args(subparser)
+    gen_purge_args(subparser)
+    gen_prepare_args(subparser)
     gen_run_args(subparser)
+    gen_list_args(subparser)
 
-    try:
-        args = parser.parse_args()
+    args = parser.parse_args()
+    if args.debug:
         args.func(args)
         sys.exit(0)
-    except KeyboardInterrupt, e:
-        sys.exit(0)
-    except ValueError, e:
-        for line in e:
-            for l in line:
-                sys.stderr.write("%s: %s\n" % (sys.argv[0], l))
-        sys.stderr.flush()
-        sys.exit(1)
-    except IOError, e:
-        sys.stderr.write("%s: %s: %s\n" % (sys.argv[0], e.filename, e.reason))
-        sys.stderr.flush()
-        sys.exit(1)
-    except OSError, e:
-        sys.stderr.write("%s: %s\n" % (sys.argv[0], e))
-        sys.stderr.flush()
-        sys.exit(1)
-    except Exception, e:
-        print e.message
-        sys.exit(1)
+    else:
+        try:
+            args.func(args)
+            sys.exit(0)
+        except KeyboardInterrupt, e:
+            sys.exit(0)
+        except ValueError, e:
+            sys.stderr.write("%s: %s\n" % (sys.argv[0], e))
+            sys.stderr.flush()
+            sys.exit(1)
+        except IOError, e:
+            sys.stderr.write("%s: %s: %s\n" % (sys.argv[0], e.filename, e.reason))
+            sys.stderr.flush()
+            sys.exit(1)
+        except OSError, e:
+            sys.stderr.write("%s: %s\n" % (sys.argv[0], e))
+            sys.stderr.flush()
+            sys.exit(1)
+        except Exception, e:
+            print e.message
+            sys.exit(1)

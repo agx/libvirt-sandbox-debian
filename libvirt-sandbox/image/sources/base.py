@@ -34,6 +34,16 @@ class Source():
     def __init__(self):
         pass
 
+    @abstractmethod
+    def list_templates(self, templatedir):
+        """
+        :param templatedir: local directory path in which to store the template
+
+        Get a list of all templates that are locally cached
+
+        :returns: a list of libvirt_sandbox.template.Template objects
+        """
+        pass
 
     @abstractmethod
     def has_template(self, template, templatedir):
@@ -128,7 +138,7 @@ class Source():
                   '/sbin/mkfs.ext3',
                   '/dev/disk/by-tag/disk_image']
         cmd = cmd + params
-        subprocess.call(cmd)
+        subprocess.check_call(cmd)
 
     def extract_tarball(self, diskfile, format, tarfile, connect):
         cmd = ['virt-sandbox']
@@ -148,4 +158,4 @@ class Source():
                   '-C',
                   '/mnt']
         cmd = cmd + params
-        subprocess.call(cmd)
+        subprocess.check_call(cmd)

@@ -19,12 +19,15 @@
 # Author: Cedric Bosdonnat <cbosdonnat@suse.com>
 #
 
-from Source import Source
 import os
 import os.path
 import subprocess
 
-class VirtBuilderSource(Source):
+from . import base
+from libvirt_sandbox.image.template import Template
+
+
+class VirtBuilderSource(base.Source):
 
     def _get_template_name(self, template):
         # We shouldn't have '/' in the names, but let's make sure
@@ -43,18 +46,18 @@ class VirtBuilderSource(Source):
         templatename = self._get_template_name(template)
         imagepath_original = "%s/%s-original.qcow2" % (templatedir, templatename)
         imagepath = "%s/%s.qcow2" % (templatedir, templatename)
-        cmd = ["virt-builder", templatename,
+        cmd = ["virt-builder", templatename, "--no-network",
                "-o", imagepath_original, "--format", "qcow2"]
-        subprocess.call(cmd)
+        subprocess.check_call(cmd)
 
         try:
             # We need to convert this image into a single partition one.
             tarfile = "%s/%s.tar" % (templatedir, templatename)
             cmd = ["virt-tar-out", "-a", imagepath_original, "/", tarfile]
-            subprocess.call(cmd)
+            subprocess.check_call(cmd)
 
             cmd = ["qemu-img", "create", "-q", "-f", "qcow2", imagepath, "10G"]
-            subprocess.call(cmd)
+            subprocess.check_call(cmd)
 
             self.format_disk(imagepath, "qcow2", connect)
             self.extract_tarball(imagepath, "qcow2", tarfile, connect)
@@ -63,6 +66,27 @@ class VirtBuilderSource(Source):
             os.unlink(imagepath_original)
             os.unlink(tarfile)
 
+    def list_templates(self, templatedir):
+        files = []
+        try:
+            imagefiles = os.listdir(templatedir)
+        except OSError:
+            return []
+
+        for filename in imagefiles:
+            if not filename.endswith(".qcow2"):
+                continue
+            files.append(filename[0:-6])
+
+        return [
+            Template(source="virt-builder",
+                     protocol=None,
+                     hostname=None,
+                     port=None,
+                     username=None,
+                     password=None,
+                     path="/%s" % filename,
+                     params={}) for filename in files]
 
     def delete_template(self, template, templatedir):
         os.unlink("%s/%s.qcow2" % (templatedir, self._get_template_name(template)))
@@ -79,7 +103,7 @@ class VirtBuilderSource(Source):
                "-f", "qcow2",
                "-o", "backing_fmt=qcow2,backing_file=%s" % diskfile,
                tempfile]
-        subprocess.call(cmd)
+        subprocess.check_call(cmd)
         return tempfile
 
     def get_env(self,template, templatedir):
