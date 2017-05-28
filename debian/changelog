@@ -1,3 +1,15 @@
+libvirt-sandbox (0.5.1+git20160404-1) unstable; urgency=medium
+
+  * [184e246] Suggest liguestfs-tools since this ships virt-builder
+  * [633cbba] Drop all patches applied upstream
+  * [1322a0c] mkinitrd: Add missing fscrypto module
+  * [412071b] Enable hardening build flags
+  * [cee66c0] Update vcs-git URLs
+  * [bbbf872] Bump standards version to 3.9.8. No changes required
+  * [db393db] Unbreak running from URLs given by "virt-sandbox-image list"
+
+ -- Guido Günther <agx@sigxcpu.org>  Sun, 28 May 2017 15:18:14 +0200
+
 libvirt-sandbox (0.5.1+git20151113-3) unstable; urgency=medium
 
   * [92a5e6a] Don't hardcode x86_64. Fixes a c'n'p error which breaks builds
