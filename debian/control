@@ -26,6 +26,7 @@ Package: virt-sandbox
 Architecture: any
 Depends: ${shlibs:Depends},
  ${misc:Depends}, 
+ e2fsprogs,
  python,
  gir1.2-libvirt-sandbox-1.0 (= ${binary:Version}),
 Suggests: libguestfs-tools
